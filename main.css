@@ -40,8 +40,27 @@
   grid-area: 2 / 2 / -1 / -1;
   display: grid;
   grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+  position: relative;
 }
 
 .grid {
   border: 1px solid var(--grid-color);
+}
+
+.draggable {
+  background: rgba(0, 60, 80, 0.75);
+  height: 122.73px;
+  width: 40.91px;
+  position: absolute;
+  left: 40%;
+  top: 20%;
+}
+
+button {
+  position: absolute;
+  bottom: 2rem;
+  width: 100px;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
 }
