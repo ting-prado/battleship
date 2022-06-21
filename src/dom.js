@@ -7,35 +7,43 @@ function createContainer() {
   const gameboard = document.createElement('div');
   const topCont = document.createElement('div');
   const sideCont = document.createElement('div');
-  const block = document.createElement('div');
-  const btn = document.querySelector('button');
   container.classList.add('container');
   gameboard.classList.add('gameboard');
   topCont.classList.add('topCont');
   sideCont.classList.add('sideCont');
-  block.classList.add('draggable');
-
-  block.draggable = true;
 
   document.querySelector('body').appendChild(container);
   container.appendChild(gameboard);
   container.appendChild(topCont);
   container.appendChild(sideCont);
-  gameboard.appendChild(block);
 
   for (let i = 0; i < 100; i++) {
     const span = document.createElement('span');
     span.classList.add('grid');
     gameboard.appendChild(span);
-
-    span.addEventListener('click', () => {
-      console.log(
-        Math.floor(span.offsetLeft / 40) + 1,
-        // eslint-disable-next-line comma-dangle
-        Math.floor(span.offsetTop / 40) + 1
-      );
-    });
   }
+
+  for (let i = 0; i < alphLabel.length; i++) {
+    const topSpan = document.createElement('span');
+    topSpan.textContent = alphLabel[i];
+    topCont.appendChild(topSpan);
+
+    const sideSpan = document.createElement('span');
+    sideSpan.textContent = i + 1;
+    sideCont.appendChild(sideSpan);
+  }
+}
+
+function createBlocks() {
+  const block = document.createElement('div');
+  const btn = document.querySelector('button');
+  block.classList.add('draggable');
+  document.querySelector('.gameboard').appendChild(block);
+
+  block.draggable = true;
+  block.style.left = `${Math.floor(Math.random() * 8 + 1) * 10}%`;
+  block.style.top = '0%'; // `${Math.floor(Math.random() * 9 + 1) * 10}%`;
+  console.log(block.style.left, block.style.top);
 
   btn.addEventListener('click', () => {
     const pos = block.getBoundingClientRect();
@@ -49,21 +57,15 @@ function createContainer() {
         for (let i = 0; i < height; i++) {
           console.log(posLeft, posTop + i);
         }
+      } else if (width > 1) {
+        for (let i = 0; i < width; i++) {
+          console.log(posLeft + i, posTop);
+        }
       }
     } else {
       console.log(posLeft, posTop);
     }
   });
-
-  for (let i = 0; i < alphLabel.length; i++) {
-    const topSpan = document.createElement('span');
-    topSpan.textContent = alphLabel[i];
-    topCont.appendChild(topSpan);
-
-    const sideSpan = document.createElement('span');
-    sideSpan.textContent = i + 1;
-    sideCont.appendChild(sideSpan);
-  }
 }
 
-export default createContainer;
+export { createContainer, createBlocks };

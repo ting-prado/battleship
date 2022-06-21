@@ -1,3 +1,4 @@
-import createContainer from './dom';
+import { createContainer, createBlocks } from './dom';
 
 createContainer();
+createBlocks();
