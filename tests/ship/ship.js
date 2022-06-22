@@ -4,11 +4,19 @@ const Ship = (length) => {
   const hitmarks = [];
 
   const getLength = () => length;
+  // eslint-disable-next-line no-unused-vars
+  const fillHits = (() => {
+    for (let i = 0; i < getLength(); i++) {
+      hitmarks[i] = '';
+    }
+  })();
 
   const hit = (coord) => {
     const index = pos.indexOf(coord);
     hitmarks[index] = 'x';
   };
+
+  const getHits = () => hitmarks;
 
   // eslint-disable-next-line consistent-return
   const isSunk = () => {
@@ -22,7 +30,12 @@ const Ship = (length) => {
     if (count === getLength()) return true;
   };
 
-  return { getLength, hit, isSunk };
+  return {
+    getLength,
+    hit,
+    getHits,
+    isSunk,
+  };
 };
 
 module.exports = Ship;
