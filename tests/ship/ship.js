@@ -1,7 +1,11 @@
 /* eslint-disable no-plusplus */
 const Ship = (length) => {
-  const pos = ['[5, 1]', '[5, 2]', '[5, 3]', '[5, 4]'];
+  let pos;
   const hitmarks = [];
+
+  const setPos = (posArr) => {
+    pos = posArr;
+  };
 
   const getLength = () => length;
   // eslint-disable-next-line no-unused-vars
@@ -32,6 +36,7 @@ const Ship = (length) => {
 
   return {
     getLength,
+    setPos,
     hit,
     getHits,
     isSunk,
