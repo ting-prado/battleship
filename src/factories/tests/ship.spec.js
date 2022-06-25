@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const Ship = require('./ship');
+const Ship = require('../ship');
 
 describe('ship with length 4', () => {
   let ship;
