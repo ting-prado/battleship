@@ -8,6 +8,7 @@ const Ship = (length) => {
   };
 
   const getLength = () => length;
+  const getPos = () => pos;
   // eslint-disable-next-line no-unused-vars
   const fillHits = (() => {
     for (let i = 0; i < getLength(); i++) {
@@ -37,6 +38,7 @@ const Ship = (length) => {
   return {
     getLength,
     setPos,
+    getPos,
     hit,
     getHits,
     isSunk,
