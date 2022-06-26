@@ -12,6 +12,15 @@ describe('ship with length 4', () => {
     expect(ship.getLength()).toBe(4);
   });
 
+  test('get ship position', () => {
+    expect(ship.getPos()).toStrictEqual([
+      '(5, 1)',
+      '(5, 2)',
+      '(5, 3)',
+      '(5, 4)',
+    ]);
+  });
+
   test('hit ship at loc 1', () => {
     ship.hit('(5, 1)');
     expect(ship.getHits()).toEqual(['x', '', '', '']);
@@ -42,6 +51,10 @@ describe('ship with length 3', () => {
 
   test('get length', () => {
     expect(ship.getLength()).toBe(3);
+  });
+
+  test('get ship position', () => {
+    expect(ship.getPos()).toStrictEqual(['(5, 1)', '(5, 2)', '(5, 3)']);
   });
 
   test('hit ship at loc 2', () => {
@@ -75,6 +88,10 @@ describe('ship with length 2', () => {
     expect(ship.getLength()).toBe(2);
   });
 
+  test('get ship position', () => {
+    expect(ship.getPos()).toStrictEqual(['(5, 1)', '(5, 2)']);
+  });
+
   test('hit ship at loc 2', () => {
     ship.hit('(5, 2)');
     expect(ship.getHits()).toEqual(['', 'x']);
@@ -99,6 +116,10 @@ describe('ship with length 1', () => {
 
   test('get length', () => {
     expect(ship.getLength()).toBe(1);
+  });
+
+  test('get ship position', () => {
+    expect(ship.getPos()).toStrictEqual(['(5, 1)']);
   });
 
   test('get hitmark', () => {
