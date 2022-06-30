@@ -34,7 +34,6 @@ const Ship = (length, pos) => {
   return {
     getInfo,
     hit,
-    isSunk,
   };
 };
 
