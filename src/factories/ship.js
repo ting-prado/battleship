@@ -1,17 +1,10 @@
 /* eslint-disable no-plusplus */
-const Ship = (length) => {
-  let pos;
+const Ship = (length, pos) => {
   const hitmarks = [];
 
-  const setPos = (posArr) => {
-    pos = posArr;
-  };
-
-  const getLength = () => length;
-  const getPos = () => pos;
   // eslint-disable-next-line no-unused-vars
   const fillHits = (() => {
-    for (let i = 0; i < getLength(); i++) {
+    for (let i = 0; i < length; i++) {
       hitmarks[i] = '';
     }
   })();
@@ -20,8 +13,6 @@ const Ship = (length) => {
     const index = pos.indexOf(coord);
     hitmarks[index] = 'x';
   };
-
-  const getHits = () => hitmarks;
 
   // eslint-disable-next-line consistent-return
   const isSunk = () => {
@@ -32,15 +23,17 @@ const Ship = (length) => {
       }
     });
 
-    if (count === getLength()) return true;
+    return count === length;
+  };
+
+  const getInfo = () => {
+    const info = { length, pos, sunken: isSunk() };
+    return info;
   };
 
   return {
-    getLength,
-    setPos,
-    getPos,
+    getInfo,
     hit,
-    getHits,
     isSunk,
   };
 };
