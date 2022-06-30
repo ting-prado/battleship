@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-const Gameboard = (() => {
+const Gameboard = () => {
   const ships = [];
   const missedHits = [];
   const sunken = [];
@@ -63,6 +63,6 @@ const Gameboard = (() => {
     getSunken,
     checkLost,
   };
-})();
+};
 
 module.exports = Gameboard;
