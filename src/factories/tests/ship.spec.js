@@ -1,137 +1,60 @@
 /* eslint-disable no-undef */
 const Ship = require('../ship');
 
-describe('ship with length 4', () => {
-  let ship;
-  beforeAll(() => {
-    ship = Ship(4);
-    ship.setPos(['(5, 1)', '(5, 2)', '(5, 3)', '(5, 4)']);
-  });
+const ship1 = Ship(4, ['(5, 1)', '(5, 2)', '(5, 3)', '(5, 4)']);
+const ship2 = Ship(3, ['(3, 5)', '(4, 5)', '(5, 5)']);
 
-  test('get length', () => {
-    expect(ship.getLength()).toBe(4);
-  });
-
-  test('get ship position', () => {
-    expect(ship.getPos()).toStrictEqual([
-      '(5, 1)',
-      '(5, 2)',
-      '(5, 3)',
-      '(5, 4)',
-    ]);
-  });
-
-  test('hit ship at loc 1', () => {
-    ship.hit('(5, 1)');
-    expect(ship.getHits()).toEqual(['x', '', '', '']);
-  });
-
-  test('hit ship again at loc 4', () => {
-    ship.hit('(5, 4)');
-    expect(ship.getHits()).toEqual(['x', '', '', 'x']);
-  });
-
-  test('is ship sunk when not all are hit', () => {
-    expect(ship.isSunk()).toBeFalsy();
-  });
-
-  test('is ship sunk when all are hit', () => {
-    ship.hit('(5, 2)');
-    ship.hit('(5, 3)');
-    expect(ship.isSunk()).toBeTruthy();
+test('get first ship info', () => {
+  expect(ship1.getInfo()).toEqual({
+    length: 4,
+    pos: ['(5, 1)', '(5, 2)', '(5, 3)', '(5, 4)'],
+    sunken: false,
   });
 });
 
-describe('ship with length 3', () => {
-  let ship;
-  beforeAll(() => {
-    ship = Ship(3);
-    ship.setPos(['(5, 1)', '(5, 2)', '(5, 3)']);
-  });
-
-  test('get length', () => {
-    expect(ship.getLength()).toBe(3);
-  });
-
-  test('get ship position', () => {
-    expect(ship.getPos()).toStrictEqual(['(5, 1)', '(5, 2)', '(5, 3)']);
-  });
-
-  test('hit ship at loc 2', () => {
-    ship.hit('(5, 2)');
-    expect(ship.getHits()).toEqual(['', 'x', '']);
-  });
-
-  test('hit ship again at loc 1', () => {
-    ship.hit('(5, 1)');
-    expect(ship.getHits()).toEqual(['x', 'x', '']);
-  });
-
-  test('is ship sunk when not all are hit', () => {
-    expect(ship.isSunk()).toBeFalsy();
-  });
-
-  test('is ship sunk when all are hit', () => {
-    ship.hit('(5, 3)');
-    expect(ship.isSunk()).toBeTruthy();
+test('get second ship info', () => {
+  expect(ship2.getInfo()).toEqual({
+    length: 3,
+    pos: ['(3, 5)', '(4, 5)', '(5, 5)'],
+    sunken: false,
   });
 });
 
-describe('ship with length 2', () => {
-  let ship;
-  beforeAll(() => {
-    ship = Ship(2);
-    ship.setPos(['(5, 1)', '(5, 2)']);
-  });
-
-  test('get length', () => {
-    expect(ship.getLength()).toBe(2);
-  });
-
-  test('get ship position', () => {
-    expect(ship.getPos()).toStrictEqual(['(5, 1)', '(5, 2)']);
-  });
-
-  test('hit ship at loc 2', () => {
-    ship.hit('(5, 2)');
-    expect(ship.getHits()).toEqual(['', 'x']);
-  });
-
-  test('is ship sunk when not all are hit', () => {
-    expect(ship.isSunk()).toBeFalsy();
-  });
-
-  test('is ship sunk when all are hit', () => {
-    ship.hit('(5, 1)');
-    expect(ship.isSunk()).toBeTruthy();
+test('check if first ship is sunk when hit once', () => {
+  ship1.hit('(5, 1)');
+  expect(ship1.getInfo()).toEqual({
+    length: 4,
+    pos: ['(5, 1)', '(5, 2)', '(5, 3)', '(5, 4)'],
+    sunken: false,
   });
 });
 
-describe('ship with length 1', () => {
-  let ship;
-  beforeAll(() => {
-    ship = Ship(1);
-    ship.setPos(['(5, 1)']);
+test('check if second ship is sunk when hit once', () => {
+  ship2.hit('(4, 5)');
+  expect(ship2.getInfo()).toEqual({
+    length: 3,
+    pos: ['(3, 5)', '(4, 5)', '(5, 5)'],
+    sunken: false,
   });
+});
 
-  test('get length', () => {
-    expect(ship.getLength()).toBe(1);
+test('check if first ship is sunk when all are hit', () => {
+  ship1.hit('(5, 2)');
+  ship1.hit('(5, 3)');
+  ship1.hit('(5, 4)');
+  expect(ship1.getInfo()).toEqual({
+    length: 4,
+    pos: ['(5, 1)', '(5, 2)', '(5, 3)', '(5, 4)'],
+    sunken: true,
   });
+});
 
-  test('get ship position', () => {
-    expect(ship.getPos()).toStrictEqual(['(5, 1)']);
-  });
-
-  test('get hitmark', () => {
-    expect(ship.getHits()).toStrictEqual(['']);
-  });
-
-  test('is ship sunk when not hit', () => {
-    expect(ship.isSunk()).toBeFalsy();
-  });
-
-  test('is ship sunk when all are hit', () => {
-    ship.hit('(5, 1)');
-    expect(ship.isSunk()).toBeTruthy();
+test('check if first ship is sunk when all are hit', () => {
+  ship2.hit('(3, 5)');
+  ship2.hit('(5, 5)');
+  expect(ship2.getInfo()).toEqual({
+    length: 3,
+    pos: ['(3, 5)', '(4, 5)', '(5, 5)'],
+    sunken: true,
   });
 });
