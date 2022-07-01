@@ -37,13 +37,23 @@ const Gameboard = () => {
     return isShipHit;
   };
 
-  const getSunken = () => sunken;
+  // eslint-disable-next-line consistent-return
+  const areAllSunken = () => {
+    let count = 0;
+    sunken.forEach((mark) => {
+      if (mark === 'x') {
+        count++;
+      }
+    });
+
+    return count === ships.length;
+  };
 
   return {
     placeShip,
     receiveAttack,
     getMissedHits,
-    getSunken,
+    areAllSunken,
   };
 };
 
