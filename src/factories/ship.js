@@ -26,14 +26,14 @@ const Ship = (length, pos) => {
     return count === length;
   };
 
-  const getInfo = () => {
-    const info = { length, pos, sunken: isSunk() };
-    return info;
-  };
+  const getLength = () => length;
+  const getPos = () => pos;
 
   return {
-    getInfo,
+    getLength,
+    getPos,
     hit,
+    isSunk,
   };
 };
 

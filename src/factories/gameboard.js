@@ -4,29 +4,12 @@ const Gameboard = () => {
   const missedHits = [];
   const sunken = [];
 
-  // eslint-disable-next-line no-unused-vars
-  const addSunkenArr = () => {
+  const placeShip = (ship) => {
+    ships.push(ship);
     sunken.push('');
   };
 
-  const placeShip = (ship) => {
-    ships.push(ship);
-    addSunkenArr();
-  };
-
   const getMissedHits = () => missedHits;
-
-  // eslint-disable-next-line consistent-return
-  const checkLost = () => {
-    let count = 0;
-    sunken.forEach((mark) => {
-      if (mark === 'x') {
-        count++;
-      }
-    });
-
-    if (count === ships.length) return true;
-  };
 
   const checkSunken = (ship) => {
     if (ship.isSunk()) {
@@ -38,8 +21,8 @@ const Gameboard = () => {
   const receiveAttack = (coord) => {
     let isShipHit = false;
     ships.forEach((ship) => {
-      ship.getPos().forEach((pos) => {
-        if (pos === coord) {
+      ship.getPos().forEach((position) => {
+        if (position === coord) {
           isShipHit = true;
           ship.hit(coord);
           checkSunken(ship);
@@ -61,7 +44,6 @@ const Gameboard = () => {
     receiveAttack,
     getMissedHits,
     getSunken,
-    checkLost,
   };
 };
 
