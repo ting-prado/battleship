@@ -26,13 +26,13 @@ test('view missed hits', () => {
   expect(gameboard.getMissedHits()).toEqual(['(6, 6)']);
 });
 
-test('sink ship2', () => {
+test('sink ship2 and check if all ships are sunk', () => {
   gameboard.receiveAttack('(4, 5)');
   gameboard.receiveAttack('(6, 5)');
-  expect(gameboard.getSunken()).toEqual(['', 'x']);
+  expect(gameboard.areAllSunken()).toBeFalsy();
 });
 
-test('sink ship1', () => {
+test('sink ship1 and check if all ships are sunk', () => {
   gameboard.receiveAttack('(1, 3)');
-  expect(gameboard.getSunken()).toEqual(['x', 'x']);
+  expect(gameboard.areAllSunken()).toBeTruthy();
 });
