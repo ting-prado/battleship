@@ -22,6 +22,10 @@ test('attack does not hit a ship', () => {
   expect(gameboard.receiveAttack('(6, 6)')).toBeFalsy();
 });
 
+test('get all hits', () => {
+  expect(gameboard.getHits()).toEqual(['(1, 2)', '(5, 5)', '(6, 6)']);
+});
+
 test('view missed hits', () => {
   expect(gameboard.getMissedHits()).toEqual(['(6, 6)']);
 });

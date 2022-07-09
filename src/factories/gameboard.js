@@ -3,6 +3,7 @@ const Gameboard = () => {
   const ships = [];
   const missedHits = [];
   const sunken = [];
+  const hits = [];
 
   const placeShip = (ship) => {
     ships.push(ship);
@@ -10,6 +11,8 @@ const Gameboard = () => {
   };
 
   const getMissedHits = () => missedHits;
+
+  const getHits = () => hits;
 
   const checkSunken = (ship) => {
     if (ship.isSunk()) {
@@ -25,12 +28,14 @@ const Gameboard = () => {
         if (position === coord) {
           isShipHit = true;
           ship.hit(coord);
+          hits.push(coord);
           checkSunken(ship);
         }
       });
     });
 
     if (!isShipHit) {
+      hits.push(coord);
       missedHits.push(coord);
     }
 
@@ -54,6 +59,7 @@ const Gameboard = () => {
     receiveAttack,
     getMissedHits,
     areAllSunken,
+    getHits,
   };
 };
 
