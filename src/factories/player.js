@@ -4,7 +4,7 @@ const Gameboard = require('./gameboard');
 
 const Player = (type = 'human') => {
   const gameboard = Gameboard();
-  const getWinStatus = () => gameboard.areAllSunken();
+  const getWinStatus = (enemy) => enemy.gameboard.areAllSunken();
 
   const getCoord = (coord) => {
     // if prevCoord is undefined, choose random coord
@@ -102,8 +102,12 @@ const Player = (type = 'human') => {
 
   const attack = (enemy, coord = null) => {
     const attCoord = type === 'comp' ? getCoord(coord) : coord;
-    enemy.gameboard.receiveAttack(attCoord);
-    return attCoord;
+    const isHit = enemy.gameboard.receiveAttack(attCoord);
+    if (type === 'comp') {
+      return { isHit, hitCoord: attCoord };
+    }
+
+    return isHit;
   };
 
   return { getWinStatus, gameboard, attack };
