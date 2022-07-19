@@ -4,6 +4,20 @@
   box-sizing: border-box;
 }
 
+body {
+  background: url('./bg.jpg') no-repeat;
+  background-size: 115%;
+  overflow: hidden;
+}
+
+.credit {
+  color: white;
+  font-family: 'Patrick Hand', cursive;
+  position: absolute;
+  bottom: 1vh;
+  left: 1vw;
+}
+
 .container {
   width: 450px;
   height: 450px;
@@ -19,7 +33,7 @@
   align-items: end;
   justify-content: space-around;
   font-family: 'Patrick Hand', cursive;
-  color: var(--grid-color);
+  color: whitesmoke;
 }
 
 .topCont {
@@ -41,6 +55,7 @@
   display: grid;
   grid-template: repeat(10, 1fr) / repeat(10, 1fr);
   position: relative;
+  background: whitesmoke;
 }
 
 .grid {
