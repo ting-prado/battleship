@@ -6,8 +6,9 @@
 
 body {
   background: url('./bg.jpg') no-repeat;
-  background-size: 115%;
+  background-size: cover;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .credit {
@@ -24,7 +25,7 @@ body {
   margin: 5rem auto;
   display: grid;
   grid-template: repeat(11, 1fr) / repeat(11, 1fr);
-  --grid-color: rgb(0, 60, 80);
+  --grid-color: rgb(0, 61, 141);
 }
 
 .topCont,
@@ -54,8 +55,8 @@ body {
   grid-area: 2 / 2 / -1 / -1;
   display: grid;
   grid-template: repeat(10, 1fr) / repeat(10, 1fr);
-  position: relative;
   background: whitesmoke;
+  position: relative;
 }
 
 .grid {
@@ -63,9 +64,10 @@ body {
 }
 
 .draggable {
-  background: rgba(0, 60, 80, 0.75);
-  height: 122.73px;
+  background: rgba(1, 73, 167, 0.9);
+  height: 81.82px;
   width: 40.91px;
+  cursor: pointer;
   position: absolute;
 }
 
@@ -76,4 +78,12 @@ button {
   right: 0;
   left: 0;
   margin: 0 auto;
+}
+
+.drag-over {
+  border: dashed 1px blue;
+}
+
+.hide {
+  display: none;
 }
