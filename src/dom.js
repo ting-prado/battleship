@@ -32,18 +32,67 @@ function createContainer() {
     sideSpan.textContent = i + 1;
     sideCont.appendChild(sideSpan);
   }
+
+  const dragEnter = (e) => {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+  };
+
+  const dragOver = (e) => {
+    e.preventDefault();
+    e.target.classList.add('drag-over');
+  };
+
+  const dragLeave = (e) => {
+    e.target.classList.remove('drag-over');
+  };
+
+  const drop = (e) => {
+    e.target.classList.remove('drag-over');
+
+    const dragged = document.querySelector('.dragged');
+
+    e.target.appendChild(dragged);
+    dragged.classList.remove('hide');
+    dragged.classList.remove('dragged');
+  };
+
+  const grids = document.querySelectorAll('.gameboard > span');
+  grids.forEach((grid) => {
+    grid.addEventListener('dragenter', dragEnter);
+    grid.addEventListener('dragover', dragOver);
+    grid.addEventListener('dragleave', dragLeave);
+    grid.addEventListener('drop', drop);
+  });
 }
 
 function createBlocks() {
   const block = document.createElement('div');
   const btn = document.querySelector('button');
   block.classList.add('draggable');
-  document.querySelector('.gameboard').appendChild(block);
+  const grids = document.querySelectorAll('.grid');
+  grids[Math.floor(Math.random() * 100)].appendChild(block);
 
   block.draggable = true;
-  block.style.left = `${Math.floor(Math.random() * 8 + 1) * 10}%`;
-  block.style.top = '0%'; // `${Math.floor(Math.random() * 9 + 1) * 10}%`;
-  console.log(block.style.left, block.style.top);
+  // randomize either height or width gets multiplied instead of rotating
+  // length 4, vertical, left 0 - 90%; top 0 - 60%
+  // length 3, vertical, left 0 - 90%, top 0 - 70%
+  // length 2, vertical, left 0 - 90%, top 0 - 80%
+  // length 4, horizontal, left 0 - 60%, top 0 - 90%
+  // length 3, horizontal, left 0 - 70%, top 0 - 90%
+  // length 2, horizontal, left 0 - 80%, top 0 - 90%
+  // length 1, left 0 - 90%, top 0 - 90%
+  const min = Math.ceil(1); // inclusive
+  const max = Math.floor(8); // exclusive
+  // block.style.left = '10%'; // `${Math.floor(Math.random() * (max - min) + min) * 10}%`;
+  // block.style.top = '70%'; // `${Math.floor(Math.random() * (max - min) + min) * 10}%`;
+
+  block.addEventListener('dragstart', (e) => {
+    e.target.classList.add('dragged');
+    setTimeout(() => {
+      e.target.classList.add('hide');
+    }, 0);
+  });
 
   btn.addEventListener('click', () => {
     const pos = block.getBoundingClientRect();
