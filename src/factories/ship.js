@@ -9,8 +9,8 @@ const Ship = (length, pos) => {
     }
   })();
 
-  const hit = (coord) => {
-    const index = pos.indexOf(coord);
+  const hit = (hitPos) => {
+    const index = pos.indexOf(hitPos);
     hitmarks[index] = 'x';
   };
 

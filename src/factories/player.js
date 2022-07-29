@@ -6,56 +6,51 @@ const Player = (type = 'human') => {
   const gameboard = Gameboard();
   const getWinStatus = (enemy) => enemy.gameboard.areAllSunken();
 
-  const getCoord = (coord) => {
-    // if prevCoord is undefined, choose random coord
-    // check if random coord is hit or not
-    // if not hit, return coord
+  const getPos = (pos) => {
+    // if prevPos is undefined, choose random pos
+    // check if random pos is hit or not
+    // if not hit, return pos
     // if hit, choose another one
-    let chosenCoord;
+    let chosenPos;
 
     const getRandomNum = () => {
-      const min = Math.ceil(1); // inclusive
-      const max = Math.floor(11); // exclusive
+      const min = Math.ceil(0); // inclusive
+      const max = Math.floor(100); // exclusive
       return Math.floor(Math.random() * (max - min) + min);
     };
 
-    const checkIfAvail = (tempCoord) =>
-      !gameboard.getHits().includes(tempCoord);
+    const checkIfAvail = (tempPos) => !gameboard.getHits().includes(tempPos);
 
-    const getRandomCoord = () => {
+    const getRandomPos = () => {
       let avail;
-      let newCoord;
+      let newPos;
 
       while (!avail) {
-        newCoord = `(${getRandomNum()}, ${getRandomNum()})`;
-        avail = checkIfAvail(newCoord);
+        newPos = getRandomNum();
+        avail = checkIfAvail(newPos);
       }
 
-      return newCoord;
+      return newPos;
     };
 
-    if (coord === null) {
-      chosenCoord = getRandomCoord();
+    if (pos === null) {
+      chosenPos = getRandomPos();
     } else {
-      // get both row and col numbers
-      // if 10, only decrease either row or col by 1 and check if hit
-      // if not, either add or subtract 1 from row or col
-      // check random surrounding coord if hit until you find a coord available
-      // if surrounding coords are hit, pick a random coord instead
-      const selection = [coord[1], coord[4]];
-      let avail, tempCoord;
+      // check random surrounding pos if hit until you find a pos available
+      // if surrounding positions are hit, pick a random pos instead
+      let avail, tempPos;
 
-      const getFormat = (i) => {
+      const getNewPos = (i) => {
         // eslint-disable-next-line default-case
         switch (i) {
           case 0:
-            return `(${selection[0]}, ${Number(selection[1]) + 1})`;
+            return pos + 1;
           case 1:
-            return `(${selection[0]}, ${Number(selection[1]) - 1})`;
+            return pos - 1;
           case 2:
-            return `(${Number(selection[0]) + 1}, ${selection[1]})`;
+            return pos + 10;
           case 3:
-            return `(${Number(selection[0]) - 1}, ${selection[1]})`;
+            return pos - 10;
         }
       };
 
@@ -65,46 +60,46 @@ const Player = (type = 'human') => {
       // every loop check if coord is available
       // return if available
       // loop 4 times
-      // if resulting coord is 11, ignore it
+      // if resulting coord is 100, ignore it
       const randomizer = Math.floor(Math.random() * 2);
       if (randomizer === 0) {
         for (let i = 0; i < 4; i++) {
-          tempCoord = getFormat(i);
-          if (tempCoord[1] === 11 || tempCoord[4] === 11) {
+          tempPos = getNewPos(i);
+          if (tempPos === 100) {
             continue;
           }
 
-          avail = checkIfAvail(tempCoord);
+          avail = checkIfAvail(tempPos);
           if (avail) {
-            chosenCoord = tempCoord;
+            chosenPos = tempPos;
             break;
           }
         }
         if (!avail) {
-          chosenCoord = getRandomCoord();
+          chosenPos = getRandomPos();
         }
       } else {
         for (let i = 3; i >= 0; i--) {
-          tempCoord = getFormat(i);
-          avail = checkIfAvail(tempCoord);
+          tempPos = getNewPos(i);
+          avail = checkIfAvail(tempPos);
           if (avail) {
-            chosenCoord = tempCoord;
+            chosenPos = tempPos;
             break;
           }
         }
         if (!avail) {
-          chosenCoord = getRandomCoord();
+          chosenPos = getRandomPos();
         }
       }
     }
-    return chosenCoord;
+    return chosenPos;
   };
 
-  const attack = (enemy, coord = null) => {
-    const attCoord = type === 'comp' ? getCoord(coord) : coord;
-    const isHit = enemy.gameboard.receiveAttack(attCoord);
+  const attack = (enemy, pos = null) => {
+    const attPos = type === 'comp' ? getPos(pos) : pos;
+    const isHit = enemy.gameboard.receiveAttack(attPos);
     if (type === 'comp') {
-      return { isHit, hitCoord: attCoord };
+      return { isHit, hitPos: attPos };
     }
 
     return isHit;

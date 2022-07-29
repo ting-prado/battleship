@@ -3,8 +3,8 @@ const Player = require('../player');
 const Ship = require('../ship');
 
 const ai = Player('comp');
-const ship1 = Ship(4, ['(5, 1)', '(5, 2)', '(5, 3)', '(5, 4)']);
-const ship2 = Ship(3, ['(3, 5)', '(4, 5)', '(5, 5)']);
+const ship1 = Ship(4, [51, 52, 53, 54]);
+const ship2 = Ship(3, [35, 45, 55]);
 const human = Player();
 ai.gameboard.placeShip(ship1);
 human.gameboard.placeShip(ship2);
@@ -15,7 +15,7 @@ describe('functions for computer player', () => {
   });
 
   test('ai attacks with previous hit', () => {
-    expect(ai.attack(human, '(4, 5)')).toEqual(expect.any(Object));
+    expect(ai.attack(human, 45)).toEqual(expect.any(Object));
   });
 
   test('check if won', () => {
@@ -25,11 +25,11 @@ describe('functions for computer player', () => {
 
 describe('functions for human player', () => {
   test('ai attacks with no previous hit', () => {
-    expect(human.attack(ai, '(5, 1)')).toBeTruthy();
+    expect(human.attack(ai, 51)).toBeTruthy();
   });
 
   test('ai attacks with previous hit', () => {
-    expect(human.attack(ai, '(6, 3)')).toBeFalsy();
+    expect(human.attack(ai, 63)).toBeFalsy();
   });
 
   test('check if won when enemy ship is not sunk', () => {
@@ -37,9 +37,9 @@ describe('functions for human player', () => {
   });
 
   test('check if won when enemy ship is sunk', () => {
-    human.attack(ai, '(5, 2)');
-    human.attack(ai, '(5, 3)');
-    human.attack(ai, '(5, 4)');
+    human.attack(ai, 52);
+    human.attack(ai, 53);
+    human.attack(ai, 54);
     expect(human.getWinStatus(ai)).toBeTruthy();
   });
 });
