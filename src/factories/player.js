@@ -105,7 +105,7 @@ const Player = (type = 'human') => {
     return isHit;
   };
 
-  return { getWinStatus, gameboard, attack };
+  return { getWinStatus, gameboard, attack, type };
 };
 
 module.exports = Player;
