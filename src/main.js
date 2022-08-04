@@ -72,6 +72,16 @@ const gameFunc = (() => {
   };
 
   const createPlayerShips = (player) => {
+    const checkPos = (pos) => {
+      let avail = true;
+      pos.forEach((item) => {
+        if (player.gameboard.getAllPos().includes(item)) {
+          avail = false;
+        }
+      });
+      return avail;
+    };
+
     if (player.type === 'human') {
       const grids = document.querySelectorAll('.grid');
       let length = 4;
@@ -84,9 +94,23 @@ const gameFunc = (() => {
             ? 'landscape'
             : 'portrait';
           const options = checkAvailPos(length, orientation);
-          grids[
-            options[Math.floor(Math.random() * options.length)]
-          ].appendChild(block);
+          let pos,
+            avail = false;
+
+          while (!avail) {
+            const tempPos = [];
+            const randInd = Math.floor(Math.random() * options.length);
+            for (let j = 0; j < length; j++) {
+              tempPos.push(
+                options[randInd] + (orientation === 'portrait' ? j * 10 : j)
+              );
+            }
+            pos = tempPos;
+            avail = checkPos(pos);
+          }
+          grids[pos[0]].appendChild(block);
+          const ship = Ship(length, pos);
+          player.gameboard.placeShip(ship);
         }
         length--;
         count++;
@@ -99,5 +123,15 @@ const gameFunc = (() => {
     const human = Player();
     const ai = Player('comp');
     createPlayerShips(human);
+
+    const grids = document.querySelectorAll('.grid');
+    const randBtn = document.querySelector('button:first-of-type');
+    randBtn.addEventListener('click', () => {
+      grids.forEach((grid) => {
+        grid.innerHTML = '';
+      });
+      human.gameboard.wipe();
+      createPlayerShips(human);
+    });
   })();
 })();

@@ -96,6 +96,10 @@ button:hover {
   border: none;
 }
 
+button:active {
+  background: rgb(0, 35, 141);
+}
+
 .drag-over {
   border: dashed 1px blue;
 }
