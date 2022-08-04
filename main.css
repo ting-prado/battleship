@@ -2,6 +2,8 @@
 
 * {
   box-sizing: border-box;
+  --main-font: 'Patrick Hand', cursive;
+  --grid-color: rgb(0, 61, 141);
 }
 
 body {
@@ -10,13 +12,15 @@ body {
   overflow: hidden;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 2rem;
 }
 
 .credit {
   color: white;
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--main-font);
   position: absolute;
   bottom: 1vh;
   left: 1vw;
@@ -27,7 +31,6 @@ body {
   height: 450px;
   display: grid;
   grid-template: repeat(11, 1fr) / repeat(11, 1fr);
-  --grid-color: rgb(0, 61, 141);
 }
 
 .topCont,
@@ -35,7 +38,7 @@ body {
   display: flex;
   align-items: end;
   justify-content: space-around;
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--main-font);
   color: whitesmoke;
 }
 
@@ -71,13 +74,26 @@ body {
   position: absolute;
 }
 
+.buttons {
+  order: 1;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
 button {
-  position: absolute;
-  bottom: 2rem;
-  width: 100px;
-  right: 0;
-  left: 0;
-  margin: 0 auto;
+  font-family: var(--main-font);
+  cursor: pointer;
+  border: none;
+  background: whitesmoke;
+  font-size: 1.2rem;
+  padding: 0.3rem;
+}
+
+button:hover {
+  color: whitesmoke;
+  background: var(--grid-color);
+  border: none;
 }
 
 .drag-over {
