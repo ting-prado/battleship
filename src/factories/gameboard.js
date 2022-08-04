@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 const Gameboard = () => {
-  const ships = [];
+  let ships = [];
   const missedHits = [];
   const sunken = [];
   const hits = [];
@@ -64,6 +64,10 @@ const Gameboard = () => {
     return arr;
   };
 
+  const wipe = () => {
+    ships = [];
+  };
+
   return {
     placeShip,
     receiveAttack,
@@ -71,6 +75,7 @@ const Gameboard = () => {
     areAllSunken,
     getHits,
     getAllPos,
+    wipe,
   };
 };
 
