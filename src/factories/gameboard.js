@@ -54,12 +54,23 @@ const Gameboard = () => {
     return count === ships.length;
   };
 
+  const getAllPos = () => {
+    const arr = [];
+    ships.forEach((ship) => {
+      ship.getPos().forEach((pos) => {
+        arr.push(pos);
+      });
+    });
+    return arr;
+  };
+
   return {
     placeShip,
     receiveAttack,
     getMissedHits,
     areAllSunken,
     getHits,
+    getAllPos,
   };
 };
 

@@ -10,6 +10,10 @@ const ship2 = Ship(3, [45, 55, 65]);
 gameboard.placeShip(ship1);
 gameboard.placeShip(ship2);
 
+test('get all positions of ships', () => {
+  expect(gameboard.getAllPos()).toEqual([12, 13, 45, 55, 65]);
+});
+
 test('attack hits a ship', () => {
   expect(gameboard.receiveAttack(12)).toBeTruthy();
 });
