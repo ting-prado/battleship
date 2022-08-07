@@ -1,6 +1,7 @@
 /* eslint-disable no-plusplus */
 const Gameboard = () => {
   let ships = [];
+  let allPos = [];
   const missedHits = [];
   const sunken = [];
   const hits = [];
@@ -54,14 +55,18 @@ const Gameboard = () => {
     return count === ships.length;
   };
 
-  const getAllPos = () => {
-    const arr = [];
+  const updateAllPos = () => {
+    allPos = [];
     ships.forEach((ship) => {
       ship.getPos().forEach((pos) => {
-        arr.push(pos);
+        allPos.push(pos);
       });
     });
-    return arr;
+  };
+
+  const getAllPos = () => {
+    updateAllPos();
+    return allPos;
   };
 
   const wipe = () => {

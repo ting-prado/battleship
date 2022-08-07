@@ -12,8 +12,9 @@ test('get second ship position', () => {
   expect(ship2.getPos()).toEqual([54, 64, 74]);
 });
 
-test('is first ship sunk when hit once', () => {
-  ship1.hit(35);
+test('is first ship sunk when position is changed and hit once', () => {
+  ship1.changePos([65, 66, 67, 68]);
+  ship1.hit(65);
   expect(ship1.isSunk()).toBeFalsy();
 });
 
@@ -25,8 +26,8 @@ test('is second ship sunk when all are hit', () => {
 });
 
 test('is first ship sunk when all are hit', () => {
-  ship1.hit(36);
-  ship1.hit(37);
-  ship1.hit(38);
+  ship1.hit(66);
+  ship1.hit(67);
+  ship1.hit(68);
   expect(ship1.isSunk()).toBeTruthy();
 });

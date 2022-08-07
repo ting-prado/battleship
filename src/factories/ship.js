@@ -26,6 +26,10 @@ const Ship = (length, pos) => {
     return count === length;
   };
 
+  const changePos = (newPos) => {
+    pos = newPos;
+  };
+
   const getLength = () => length;
   const getPos = () => pos;
 
@@ -34,6 +38,7 @@ const Ship = (length, pos) => {
     getPos,
     hit,
     isSunk,
+    changePos,
   };
 };
 

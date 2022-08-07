@@ -14,8 +14,13 @@ test('get all positions of ships', () => {
   expect(gameboard.getAllPos()).toEqual([12, 13, 45, 55, 65]);
 });
 
+test('get all positions of ships when a ship position is changed', () => {
+  ship1.changePos([14, 15]);
+  expect(gameboard.getAllPos()).toEqual([14, 15, 45, 55, 65]);
+});
+
 test('attack hits a ship', () => {
-  expect(gameboard.receiveAttack(12)).toBeTruthy();
+  expect(gameboard.receiveAttack(14)).toBeTruthy();
 });
 
 test('attack hits another ship', () => {
@@ -27,7 +32,7 @@ test('attack does not hit a ship', () => {
 });
 
 test('get all hits', () => {
-  expect(gameboard.getHits()).toEqual([12, 55, 66]);
+  expect(gameboard.getHits()).toEqual([14, 55, 66]);
 });
 
 test('view missed hits', () => {
@@ -41,6 +46,6 @@ test('sink ship2 and check if all ships are sunk', () => {
 });
 
 test('sink ship1 and check if all ships are sunk', () => {
-  gameboard.receiveAttack(13);
+  gameboard.receiveAttack(15);
   expect(gameboard.areAllSunken()).toBeTruthy();
 });
