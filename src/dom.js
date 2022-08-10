@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 /* eslint-disable no-console */
 /* eslint-disable no-plusplus */
 const createContainer = () => {
@@ -40,7 +41,6 @@ const createBlock = (length) => {
   block.classList.add('draggable');
   block.draggable = true;
   const random = Math.floor(Math.random() * 2);
-  // change the appendable grids depending on length
   if (random === 1) {
     block.style.width = `${size}px`;
     block.style.height = `${size * length}px`;
@@ -52,19 +52,115 @@ const createBlock = (length) => {
   return block;
 };
 
-const addFuncs = (block, orientation) => {
+const getOptions = (block) => {
+  const arr = [];
+  if (block.orientation === 'portrait') {
+    switch (block.length) {
+      case 4:
+        for (let i = 0; i < 70; i++) {
+          arr.push(i);
+        }
+        break;
+      case 3:
+        for (let i = 0; i < 80; i++) {
+          arr.push(i);
+        }
+        break;
+      case 2:
+        for (let i = 0; i < 90; i++) {
+          arr.push(i);
+        }
+        break;
+      case 1:
+        for (let i = 0; i < 100; i++) {
+          arr.push(i);
+        }
+        break;
+    }
+  } else {
+    let limits;
+    switch (block.length) {
+      case 4:
+        limits = [7, 8, 9];
+        break;
+      case 3:
+        limits = [8, 9];
+        break;
+      case 2:
+        limits = [9];
+        break;
+    }
+    for (let i = 0; i < 100; i++) {
+      const numStr = i.toString();
+      let avail = true;
+      limits.forEach((num) => {
+        if (i === num || numStr[1] == num) {
+          avail = false;
+        }
+      });
+      if (avail) {
+        arr.push(i);
+      }
+    }
+  }
+  return arr;
+};
+
+const getNewPos = (block, startingPt) => {
+  const newPos = [];
+  // prettier-ignore
+  for (let j = 0; j < block.length; j++) {
+    newPos.push(
+      startingPt + (block.orientation === 'portrait' ? j * 10 : j)
+    );
+  }
+  return newPos;
+};
+
+const checkPos = (mode, player, pos, oldPos) => {
+  let avail = true;
+  const arr = player.gameboard.getAllPos();
+  if (mode === 'existing') {
+    for (let i = 0; i < oldPos.length; i++) {
+      arr.splice(arr.indexOf(oldPos[i]), 1);
+    }
+  }
+  pos.forEach((item) => {
+    if (arr.includes(item)) {
+      avail = false;
+    }
+  });
+  return avail;
+};
+
+const addBlockEvents = (block, ship, player) => {
+  const options = getOptions(block);
+  const grids = document.querySelectorAll('.grid');
   // activate these functions during dragstart
   // get length of block that is being dragged
-  // change drop targets according to length
-  const grids = document.querySelectorAll('.grid');
+  // change drop targets according to block length and orientation
   const dragEnter = (e) => {
     e.preventDefault();
-    e.target.classList.add('drag-over');
+    if (e.target.classList.contains('droppable')) {
+      e.target.classList.add('drag-over');
+    }
   };
 
+  // add drag&drop properties to all grids
+  // get block previous position on dragstart
+  // add specific class on non-droppable grids
+  // check if grid is included in options when dragging over/dropping
+  // if yes, add drag-over class and allow drop
+  // if no, do not display drag-over class
+  // also check if the rest of the block occupies another block
+  // if yes, return block to previous position
+  // if a block is dropped on non-option grid,
+  // return block to previous position
   const dragOver = (e) => {
     e.preventDefault();
-    e.target.classList.add('drag-over');
+    if (e.target.classList.contains('droppable')) {
+      e.target.classList.add('drag-over');
+    }
   };
 
   const dragLeave = (e) => {
@@ -73,37 +169,33 @@ const addFuncs = (block, orientation) => {
 
   const drop = (e) => {
     e.target.classList.remove('drag-over');
-
     const dragged = document.querySelector('.dragged');
+    let newPos;
+    if (e.target.classList.contains('grid')) {
+      newPos = getNewPos(block, Array.prototype.indexOf.call(grids, e.target));
+      const avail = checkPos('existing', player, newPos, block.pos);
+      if (avail && e.target.classList.contains('droppable')) {
+        e.target.appendChild(dragged);
+        ship.changePos(newPos);
+        block.pos = newPos;
+      } else {
+        grids[block.pos[0]].appendChild(dragged);
+      }
+    } else {
+      grids[block.pos[0]].appendChild(dragged);
+    }
 
-    e.target.appendChild(dragged);
     dragged.classList.remove('hide');
     dragged.classList.remove('dragged');
+    grids.forEach((grid) => {
+      grid.classList.remove('droppable');
+      grid.classList.remove('non-droppable');
+      grid.removeEventListener('dragenter', dragEnter);
+      grid.removeEventListener('dragover', dragOver);
+      grid.removeEventListener('dragleave', dragLeave);
+      grid.removeEventListener('drop', drop);
+    });
   };
-
-  grids.forEach((grid) => {
-    grid.addEventListener('dragenter', dragEnter);
-    grid.addEventListener('dragover', dragOver);
-    grid.addEventListener('dragleave', dragLeave);
-    grid.addEventListener('drop', drop);
-  });
-
-  block.addEventListener('click', () => {
-    const grid = block.parentNode;
-    const index = Array.prototype.indexOf.call(grids, grid);
-    const pos = [];
-    for (
-      let k = 0;
-      // prettier-ignore
-      k < Math.round(
-        (random === 1 ? block.offsetHeight : block.offsetWidth) / size
-      );
-      k++
-    ) {
-      pos.push(index + (random === 1 ? k * 10 : k));
-    }
-    console.log(pos.join(', '));
-  });
 
   block.addEventListener('dragstart', (e) => {
     // add drag properties to grid on dragstart
@@ -111,10 +203,32 @@ const addFuncs = (block, orientation) => {
     // remove drag properties on grids after dropping
     // add checker so blocks won't overlap
     e.target.classList.add('dragged');
+    let j = 0;
+    for (let i = 0; i < 100; i++) {
+      if (i === options[j]) {
+        grids[i].classList.add('droppable');
+        j++;
+      } else {
+        grids[i].classList.add('non-droppable');
+      }
+    }
+    grids.forEach((grid) => {
+      grid.addEventListener('dragenter', dragEnter);
+      grid.addEventListener('dragover', dragOver);
+      grid.addEventListener('dragleave', dragLeave);
+      grid.addEventListener('drop', drop);
+    });
     setTimeout(() => {
       e.target.classList.add('hide');
     }, 0);
   });
 };
 
-export { createContainer, createBlock, addFuncs };
+export {
+  createContainer,
+  createBlock,
+  addBlockEvents,
+  getNewPos,
+  getOptions,
+  checkPos,
+};
