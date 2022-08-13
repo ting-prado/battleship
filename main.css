@@ -26,6 +26,13 @@ body {
   left: 1vw;
 }
 
+.containers {
+  width: 100%;
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+}
+
 .container {
   width: 450px;
   height: 450px;
@@ -64,11 +71,17 @@ body {
   position: relative;
 }
 
-.grid {
+.grid,
+.aigrid {
   border: 1px solid var(--grid-color);
 }
 
-.draggable {
+.aigrid {
+  cursor: pointer;
+}
+
+.draggable,
+.aiblock {
   background: rgba(1, 73, 167, 0.9);
   cursor: pointer;
   position: absolute;
@@ -107,4 +120,18 @@ button:active {
 
 .hide {
   display: none;
+}
+
+.hit {
+  background: url('./x.jpg');
+}
+
+.miss {
+  background: url('./dot.jpg');
+}
+
+.hit,
+.miss {
+  background-size: cover;
+  background-position: center;
 }
