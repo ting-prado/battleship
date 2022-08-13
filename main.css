@@ -34,10 +34,18 @@ body {
 }
 
 .container {
-  width: 450px;
-  height: 450px;
   display: grid;
   grid-template: repeat(11, 1fr) / repeat(11, 1fr);
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 .topCont,
@@ -47,6 +55,7 @@ body {
   justify-content: space-around;
   font-family: var(--main-font);
   color: whitesmoke;
+  user-select: none;
 }
 
 .topCont {
@@ -74,10 +83,6 @@ body {
 .grid,
 .aigrid {
   border: 1px solid var(--grid-color);
-}
-
-.aigrid {
-  cursor: pointer;
 }
 
 .draggable,
@@ -122,16 +127,35 @@ button:active {
   display: none;
 }
 
-.hit {
-  background: url('./x.jpg');
+.hit,
+.grid > .hit {
+  background: rgb(255, 192, 192);
 }
 
-.miss {
-  background: url('./dot.jpg');
+.miss,
+.grid > .miss {
+  background: rgb(201, 201, 201);
 }
 
 .hit,
 .miss {
-  background-size: cover;
-  background-position: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+  color: rgb(54, 54, 54);
+  user-select: none;
+}
+
+.grid > .hit,
+.grid > .miss {
+  position: absolute;
+}
+
+.grid > .hit {
+  background: rgb(247, 103, 103);
+  color: red;
+  opacity: 0.6;
 }
