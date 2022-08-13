@@ -17,7 +17,9 @@ import Player from './factories/player';
 // one player's ships have all been sunk
 const gameFunc = (() => {
   const generateShips = (player) => {
-    const grids = document.querySelectorAll('.grid');
+    const grids = document.querySelectorAll(
+      player.type === 'human' ? '.grid' : '.aigrid'
+    );
     const randBtn = document.querySelector('button:first-of-type');
 
     const createPlayerShips = () => {
@@ -25,7 +27,7 @@ const gameFunc = (() => {
       let count = 1;
       for (let i = 0; i < 4; i++) {
         for (let k = 0; k < count; k++) {
-          const block = dom.createBlock(length);
+          const block = dom.createBlock(player, length);
           block.length = length;
           // prettier-ignore
           block.orientation = block.style.width.match(/^.+?(?=px)/)[0] / 40.91 > 1
@@ -61,15 +63,34 @@ const gameFunc = (() => {
         createPlayerShips();
       });
     } else {
+      createPlayerShips();
     }
   };
 
   const init = (() => {
-    dom.createContainer();
-    // separate class name for human and ai container
+    const startBtn = document.querySelector('button:nth-of-type(2)');
     const human = Player();
     const ai = Player('comp');
+    dom.createContainer(human);
     generateShips(human);
-    generateShips(ai);
+
+    const startGame = () => {
+      dom.createContainer(ai);
+      generateShips(ai);
+      dom.removeBlockEvents();
+      const aigameboard = document.querySelectorAll('.aigrid');
+      const playerTurn = (e) => {
+        const pos = Array.prototype.indexOf.call(aigameboard, e.target);
+        const isHit = human.attack(ai, pos);
+        e.target.classList.add(isHit ? 'hit' : 'miss');
+        e.target.removeEventListener('click', playerTurn);
+        e.target.style.cursor = 'auto';
+      };
+      aigameboard.forEach((grid) => {
+        grid.addEventListener('click', playerTurn);
+      });
+    };
+
+    startBtn.addEventListener('click', startGame);
   })();
 })();

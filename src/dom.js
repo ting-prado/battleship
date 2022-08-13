@@ -1,9 +1,10 @@
 /* eslint-disable default-case */
 /* eslint-disable no-console */
 /* eslint-disable no-plusplus */
-const createContainer = () => {
+const createContainer = (player) => {
   const alphLabel = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
+  const containersDiv = document.querySelector('.containers');
   const container = document.createElement('div');
   const gameboard = document.createElement('div');
   const topCont = document.createElement('div');
@@ -13,14 +14,14 @@ const createContainer = () => {
   topCont.classList.add('topCont');
   sideCont.classList.add('sideCont');
 
-  document.querySelector('body').appendChild(container);
+  containersDiv.appendChild(container);
   container.appendChild(gameboard);
   container.appendChild(topCont);
   container.appendChild(sideCont);
 
   for (let i = 0; i < 100; i++) {
     const span = document.createElement('span');
-    span.classList.add('grid');
+    span.classList.add(player.type === 'human' ? 'grid' : 'aigrid');
     gameboard.appendChild(span);
   }
 
@@ -35,11 +36,16 @@ const createContainer = () => {
   }
 };
 
-const createBlock = (length) => {
+const createBlock = (player, length) => {
   const size = 40.91;
   const block = document.createElement('div');
-  block.classList.add('draggable');
-  block.draggable = true;
+  if (player.type === 'human') {
+    block.classList.add('draggable');
+    block.draggable = true;
+  } else {
+    block.classList.add('aiblock');
+    block.style.visibility = 'hidden';
+  }
   const random = Math.floor(Math.random() * 2);
   if (random === 1) {
     block.style.width = `${size}px`;
@@ -224,10 +230,21 @@ const addBlockEvents = (block, ship, player) => {
   });
 };
 
+const removeBlockEvents = () => {
+  const blocks = document.querySelectorAll('.draggable');
+  blocks.forEach((block) => {
+    const clone = block.cloneNode(true);
+    clone.draggable = false;
+    clone.style.cursor = 'auto';
+    block.parentNode.replaceChild(clone, block);
+  });
+};
+
 export {
   createContainer,
   createBlock,
   addBlockEvents,
+  removeBlockEvents,
   getNewPos,
   getOptions,
   checkPos,
