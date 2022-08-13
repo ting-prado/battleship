@@ -13,6 +13,12 @@ const createContainer = (player) => {
   gameboard.classList.add('gameboard');
   topCont.classList.add('topCont');
   sideCont.classList.add('sideCont');
+  if (player.type === 'comp') {
+    container.setAttribute(
+      'style',
+      'animation: 1s appear; animation-fill-mode: forwards; visibility: hidden'
+    );
+  }
 
   containersDiv.appendChild(container);
   container.appendChild(gameboard);
@@ -22,6 +28,9 @@ const createContainer = (player) => {
   for (let i = 0; i < 100; i++) {
     const span = document.createElement('span');
     span.classList.add(player.type === 'human' ? 'grid' : 'aigrid');
+    if (player.type === 'comp') {
+      span.style.cursor = 'pointer';
+    }
     gameboard.appendChild(span);
   }
 
@@ -154,7 +163,6 @@ const addBlockEvents = (block, ship, player) => {
 
   // add drag&drop properties to all grids
   // get block previous position on dragstart
-  // add specific class on non-droppable grids
   // check if grid is included in options when dragging over/dropping
   // if yes, add drag-over class and allow drop
   // if no, do not display drag-over class
@@ -173,12 +181,18 @@ const addBlockEvents = (block, ship, player) => {
     e.target.classList.remove('drag-over');
   };
 
+  const dragEnd = (e) => {
+    e.target.classList.remove('hide');
+  };
+
   const drop = (e) => {
     e.target.classList.remove('drag-over');
     const dragged = document.querySelector('.dragged');
-    let newPos;
     if (e.target.classList.contains('grid')) {
-      newPos = getNewPos(block, Array.prototype.indexOf.call(grids, e.target));
+      const newPos = getNewPos(
+        block,
+        Array.prototype.indexOf.call(grids, e.target)
+      );
       const avail = checkPos('existing', player, newPos, block.pos);
       if (avail && e.target.classList.contains('droppable')) {
         e.target.appendChild(dragged);
@@ -187,15 +201,11 @@ const addBlockEvents = (block, ship, player) => {
       } else {
         grids[block.pos[0]].appendChild(dragged);
       }
-    } else {
-      grids[block.pos[0]].appendChild(dragged);
     }
-
     dragged.classList.remove('hide');
     dragged.classList.remove('dragged');
     grids.forEach((grid) => {
       grid.classList.remove('droppable');
-      grid.classList.remove('non-droppable');
       grid.removeEventListener('dragenter', dragEnter);
       grid.removeEventListener('dragover', dragOver);
       grid.removeEventListener('dragleave', dragLeave);
@@ -214,8 +224,6 @@ const addBlockEvents = (block, ship, player) => {
       if (i === options[j]) {
         grids[i].classList.add('droppable');
         j++;
-      } else {
-        grids[i].classList.add('non-droppable');
       }
     }
     grids.forEach((grid) => {
@@ -228,19 +236,41 @@ const addBlockEvents = (block, ship, player) => {
       e.target.classList.add('hide');
     }, 0);
   });
+
+  block.addEventListener('dragend', dragEnd);
 };
 
 const removeBlockEvents = () => {
+  const grids = document.querySelectorAll('.grid, .aigrid');
   const blocks = document.querySelectorAll('.draggable');
+  const btns = document.querySelectorAll('button');
   blocks.forEach((block) => {
     const clone = block.cloneNode(true);
     clone.draggable = false;
     clone.style.cursor = 'auto';
     block.parentNode.replaceChild(clone, block);
   });
+  btns.forEach((btn) => {
+    btn.classList.add('hide');
+  });
+  grids.forEach((grid) => {
+    grid.style.position = 'relative';
+  });
+};
+
+const addEffect = (index, hit, player) => {
+  const grids = document.querySelectorAll(
+    player.type === 'human' ? '.aigrid' : '.grid'
+  );
+  const cover = document.createElement('span');
+  cover.textContent = hit ? '✕' : '●';
+  cover.classList.add(hit ? 'hit' : 'miss');
+  grids[index].appendChild(cover);
+  grids[index].style.cursor = 'auto';
 };
 
 export {
+  addEffect,
   createContainer,
   createBlock,
   addBlockEvents,

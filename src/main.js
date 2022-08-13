@@ -82,9 +82,8 @@ const gameFunc = (() => {
       const playerTurn = (e) => {
         const pos = Array.prototype.indexOf.call(aigameboard, e.target);
         const isHit = human.attack(ai, pos);
-        e.target.classList.add(isHit ? 'hit' : 'miss');
+        dom.addEffect(pos, isHit, human);
         e.target.removeEventListener('click', playerTurn);
-        e.target.style.cursor = 'auto';
       };
       aigameboard.forEach((grid) => {
         grid.addEventListener('click', playerTurn);
