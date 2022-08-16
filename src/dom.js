@@ -269,6 +269,33 @@ const addGridEffect = (index, hit, player) => {
   grids[index].style.cursor = 'auto';
 };
 
+const displayEndGame = (winner) => {
+  const body = document.querySelector('body');
+  const div = document.createElement('div');
+  const cover = document.createElement('div');
+  const par = document.createElement('p');
+  const restartBtn = document.createElement('button');
+  div.setAttribute('id', 'gameoverDiv');
+  cover.classList.add('cover');
+  restartBtn.textContent = 'Restart?';
+  restartBtn.classList.add('restart-btn');
+  div.classList.add('finalDiv');
+  restartBtn.classList.add('restartBtn');
+  par.classList.add('resultMessage');
+
+  if (winner.type === 'human') {
+    par.textContent = 'Congrats, captain! We won the battle!';
+  } else {
+    par.textContent =
+      "I'm sorry captain, we lost the battle. Let us abandon ship!";
+  }
+
+  body.appendChild(cover);
+  cover.appendChild(div);
+  div.appendChild(par);
+  div.appendChild(restartBtn);
+};
+
 const cursor = (() => {
   const doc = document.querySelector('html');
   const addWait = () => {
@@ -291,6 +318,7 @@ export {
   createBlock,
   addBlockEvents,
   removeBlockEvents,
+  displayEndGame,
   getNewPos,
   getOptions,
   checkPos,

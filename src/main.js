@@ -67,7 +67,7 @@ const gameFunc = (() => {
     }
   };
 
-  const init = (() => {
+  const init = () => {
     const startBtn = document.querySelector('button:nth-of-type(2)');
     const human = Player();
     const ai = Player('comp');
@@ -96,7 +96,10 @@ const gameFunc = (() => {
               dom.cursor.removeWait();
               dom.addGridEffect(attackStat.hitPos, true, ai);
               if (isWon) {
-                alert('You lost the game, sucker!');
+                dom.displayEndGame(ai);
+                startBtn.removeEventListener('click', startGame);
+                const restartBtn = document.querySelector('.restart-btn');
+                restartBtn.addEventListener('click', restart);
               } else {
                 aiAttackLoop(attackStat.hitPos);
               }
@@ -113,7 +116,10 @@ const gameFunc = (() => {
         if (isHit) {
           const isWon = human.getWinStatus(ai);
           if (isWon) {
-            alert('You won the game!');
+            dom.displayEndGame(human);
+            startBtn.removeEventListener('click', startGame);
+            const restartBtn = document.querySelector('.restart-btn');
+            restartBtn.addEventListener('click', restart);
           }
         } else {
           aiTurn();
@@ -126,5 +132,19 @@ const gameFunc = (() => {
     };
 
     startBtn.addEventListener('click', startGame);
-  })();
+  };
+
+  function restart() {
+    const containers = document.querySelector('.containers');
+    const btns = document.querySelectorAll('button');
+    containers.innerHTML = '';
+    btns.forEach((btn) => {
+      btn.classList.remove('hide');
+    });
+    document
+      .querySelector('body')
+      .removeChild(document.querySelector('.cover'));
+    init();
+  }
+  init();
 })();
