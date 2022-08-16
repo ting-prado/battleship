@@ -130,11 +130,13 @@ button:active {
 .hit,
 .grid > .hit {
   background: rgb(255, 192, 192);
+  color: red;
 }
 
 .miss,
 .grid > .miss {
   background: rgb(201, 201, 201);
+  color: rgb(54, 54, 54);
 }
 
 .hit,
@@ -145,7 +147,6 @@ button:active {
   align-items: center;
   justify-content: center;
   font-size: 35px;
-  color: rgb(54, 54, 54);
   user-select: none;
 }
 
@@ -156,6 +157,5 @@ button:active {
 
 .grid > .hit {
   background: rgb(247, 103, 103);
-  color: red;
-  opacity: 0.6;
+  opacity: 0.8;
 }
