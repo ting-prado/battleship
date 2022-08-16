@@ -6,7 +6,7 @@ const Player = (type = 'human') => {
   const gameboard = Gameboard();
   const getWinStatus = (enemy) => enemy.gameboard.areAllSunken();
 
-  const getPos = (pos) => {
+  const getPos = (enemy, pos) => {
     // if prevPos is undefined, choose random pos
     // check if random pos is hit or not
     // if not hit, return pos
@@ -19,7 +19,8 @@ const Player = (type = 'human') => {
       return Math.floor(Math.random() * (max - min) + min);
     };
 
-    const checkIfAvail = (tempPos) => !gameboard.getHits().includes(tempPos);
+    const checkIfAvail = (tempPos) =>
+      !enemy.gameboard.getHits().includes(tempPos);
 
     const getRandomPos = () => {
       let avail;
@@ -65,7 +66,7 @@ const Player = (type = 'human') => {
       if (randomizer === 0) {
         for (let i = 0; i < 4; i++) {
           tempPos = getNewPos(i);
-          if (tempPos === 100) {
+          if (tempPos > 99 || tempPos < 0) {
             continue;
           }
 
@@ -96,7 +97,7 @@ const Player = (type = 'human') => {
   };
 
   const attack = (enemy, pos = null) => {
-    const attPos = type === 'comp' ? getPos(pos) : pos;
+    const attPos = type === 'comp' ? getPos(enemy, pos) : pos;
     const isHit = enemy.gameboard.receiveAttack(attPos);
     if (type === 'comp') {
       return { isHit, hitPos: attPos };
