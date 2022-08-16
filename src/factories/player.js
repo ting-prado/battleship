@@ -82,6 +82,9 @@ const Player = (type = 'human') => {
       } else {
         for (let i = 3; i >= 0; i--) {
           tempPos = getNewPos(i);
+          if (tempPos > 99 || tempPos < 0) {
+            continue;
+          }
           avail = checkIfAvail(tempPos);
           if (avail) {
             chosenPos = tempPos;
