@@ -79,14 +79,49 @@ const gameFunc = (() => {
       generateShips(ai);
       dom.removeBlockEvents();
       const aigameboard = document.querySelectorAll('.aigrid');
-      const playerTurn = (e) => {
+
+      const aiTurn = () => {
+        const aiAttackLoop = (prevPos) => {
+          const attackStat = ai.attack(human, prevPos);
+          if (!attackStat.isHit) {
+            dom.cursor.addWait();
+            setTimeout(() => {
+              dom.cursor.removeWait();
+              dom.addGridEffect(attackStat.hitPos, false, ai);
+            }, 500);
+          } else {
+            const isWon = ai.getWinStatus(human);
+            dom.cursor.addWait();
+            setTimeout(() => {
+              dom.cursor.removeWait();
+              dom.addGridEffect(attackStat.hitPos, true, ai);
+              if (isWon) {
+                alert('You lost the game, sucker!');
+              } else {
+                aiAttackLoop(attackStat.hitPos);
+              }
+            }, 500);
+          }
+        };
+        aiAttackLoop(null);
+      };
+
+      const playTurn = (e) => {
         const pos = Array.prototype.indexOf.call(aigameboard, e.target);
         const isHit = human.attack(ai, pos);
-        dom.addEffect(pos, isHit, human);
-        e.target.removeEventListener('click', playerTurn);
+        dom.addGridEffect(pos, isHit, human);
+        if (isHit) {
+          const isWon = human.getWinStatus(ai);
+          if (isWon) {
+            alert('You won the game!');
+          }
+        } else {
+          aiTurn();
+        }
       };
-      aigameboard.forEach((grid) => {
-        grid.addEventListener('click', playerTurn);
+
+      aigameboard.forEach((aigrid) => {
+        aigrid.addEventListener('click', playTurn, { once: true });
       });
     };
 

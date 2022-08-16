@@ -258,7 +258,7 @@ const removeBlockEvents = () => {
   });
 };
 
-const addEffect = (index, hit, player) => {
+const addGridEffect = (index, hit, player) => {
   const grids = document.querySelectorAll(
     player.type === 'human' ? '.aigrid' : '.grid'
   );
@@ -269,8 +269,24 @@ const addEffect = (index, hit, player) => {
   grids[index].style.cursor = 'auto';
 };
 
+const cursor = (() => {
+  const doc = document.querySelector('html');
+  const addWait = () => {
+    doc.style.pointerEvents = 'none';
+    doc.style.cursor = 'wait';
+  };
+
+  const removeWait = () => {
+    doc.style.pointerEvents = 'auto';
+    doc.style.cursor = 'auto';
+  };
+
+  return { addWait, removeWait };
+})();
+
 export {
-  addEffect,
+  cursor,
+  addGridEffect,
   createContainer,
   createBlock,
   addBlockEvents,
